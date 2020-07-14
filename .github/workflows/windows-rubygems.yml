@@ -7,6 +7,7 @@ on:
     branches:
       - master
       - 3.2
+      - windows_alt_path_separator
 
 jobs:
   windows_rubygems:
@@ -27,5 +28,5 @@ jobs:
       - name: Run Test
         run: |
           ridk enable
-          rake test
+          rake test TESTOPTS=--verbose
     timeout-minutes: 15
