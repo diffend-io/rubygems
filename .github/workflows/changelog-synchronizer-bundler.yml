@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - sync_changelog
 
     paths:
       - bundler/CHANGELOG.md
