@@ -25,8 +25,8 @@ namespace :release do
 
   class Changelog
     def release_notes(version)
-      current_version_title = "#{section_token}#{version}"
-      current_minor_title = "#{section_token}#{version.segments[0, 2].join(".")}"
+      current_version_title = "#{release_section_token}#{version}"
+      current_minor_title = "#{release_section_token}#{version.segments[0, 2].join(".")}"
 
       current_version_index = lines.find_index {|line| line.strip =~ /^#{current_version_title}($|\b)/ }
       unless current_version_index
@@ -35,7 +35,7 @@ namespace :release do
       current_version_index += 1
       previous_version_lines = lines[current_version_index.succ...-1]
       previous_version_index = current_version_index + (
-        previous_version_lines.find_index {|line| line.start_with?(section_token) && !line.start_with?(current_minor_title) } ||
+        previous_version_lines.find_index {|line| line.start_with?(release_section_token) && !line.start_with?(current_minor_title) } ||
         lines.count
       )
 
@@ -51,17 +51,17 @@ namespace :release do
     end
 
     def unreleased_notes
-      join_and_strip(lines.take_while {|line| line == unreleased_section_title || !line.start_with?(section_token) })
+      join_and_strip(lines.take_while {|line| line == unreleased_section_title || !line.start_with?(release_section_token) })
     end
 
   private
 
     def unreleased_section_title
-      "#{section_token}(Unreleased)"
+      "#{release_section_token}(Unreleased)"
     end
 
     def released_notes
-      lines.drop_while {|line| line == unreleased_section_title || !line.start_with?(section_token) }
+      lines.drop_while {|line| line == unreleased_section_title || !line.start_with?(release_section_token) }
     end
 
     def join_and_strip(lines)
@@ -76,7 +76,7 @@ namespace :release do
       File.open("CHANGELOG.md", "r:UTF-8", &:read)
     end
 
-    def section_token
+    def release_section_token
       "## "
     end
   end
